@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+history.db
+venv/
+.venv/
+.idea/
+.vscode/
