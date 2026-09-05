@@ -1,0 +1,30 @@
+{
+  "input": {
+    "bytes_dir": "../../数据集/kaggle2015-sample/subtrain",
+    "labels_csv": "../../数据集/kaggle2015-sample/subtrainLabels.csv",
+    "manifest_csv": "../../数据集/data/final/data/dataset.csv"
+  },
+  "output_dir": "outputs",
+  "max_samples": 0,
+  "seed": 42,
+  "byte_sequence": {
+    "max_length": 1024,
+    "pad_value": 0,
+    "unknown_value": 0,
+    "truncate": "keep_head"
+  },
+  "entropy": {
+    "enabled": true,
+    "known_bytes_only": true
+  },
+  "ngram": {
+    "ns": [1, 2],
+    "top_k": {
+      "1": 256,
+      "2": 1024,
+      "3": 1024
+    },
+    "normalize": "frequency",
+    "known_bytes_only": true
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "sample_count": 803,
+  "fused_dim": 2305,
+  "feature_groups": {
+    "byte_seq": {
+      "shape": [
+        803,
+        1024
+      ],
+      "slice": [
+        0,
+        1024
+      ]
+    },
+    "entropy": {
+      "shape": [
+        803,
+        1
+      ],
+      "slice": [
+        1024,
+        1025
+      ]
+    },
+    "ngram": {
+      "shape": [
+        803,
+        1280
+      ],
+      "slice": [
+        1025,
+        2305
+      ]
+    }
+  },
+  "weights": {
+    "byte_seq": 0.3535344181836635,
+    "entropy": 0.32666953341778526,
+    "ngram": 0.31979604839855125
+  },
+  "config": {
+    "feature_groups": {
+      "byte_seq": {
+        "enabled": true,
+        "normalize": "minmax",
+        "scale": 255.0
+      },
+      "entropy": {
+        "enabled": true,
+        "normalize": "minmax",
+        "expected_min": 0.0,
+        "expected_max": 8.0
+      },
+      "ngram": {
+        "enabled": true,
+        "ns": [
+          1,
+          2
+        ],
+        "normalize": "none"
+      }
+    },
+    "adaptive_weighting": {
+      "method": "variance_softmax",
+      "temperature": 1.0,
+      "eps": 1e-06
+    }
+  }
+}

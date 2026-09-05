@@ -1,0 +1,25 @@
+{
+  "feature_groups": {
+    "byte_seq": {
+      "enabled": true,
+      "normalize": "minmax",
+      "scale": 255.0
+    },
+    "entropy": {
+      "enabled": true,
+      "normalize": "minmax",
+      "expected_min": 0.0,
+      "expected_max": 8.0
+    },
+    "ngram": {
+      "enabled": true,
+      "ns": [1, 2],
+      "normalize": "none"
+    }
+  },
+  "adaptive_weighting": {
+    "method": "variance_softmax",
+    "temperature": 1.0,
+    "eps": 1e-6
+  }
+}
