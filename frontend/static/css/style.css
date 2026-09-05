@@ -1,0 +1,54 @@
+/* 木马家族分类系统 —— 前端自定义样式 */
+
+body {
+    background-color: #f5f7fa;
+    font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* 上传区拖拽提示 */
+#file-input {
+    cursor: pointer;
+}
+
+/* 分类结果数字 */
+#predicted-family,
+#confidence {
+    word-break: break-all;
+}
+
+/* 状态徽章颜色 */
+#service-status.status-ok {
+    background-color: #198754 !important;
+}
+
+#service-status.status-error {
+    background-color: #dc3545 !important;
+}
+
+/* 表格 */
+.table {
+    margin-bottom: 0;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+/* 响应式：小屏下结果数字缩小 */
+@media (max-width: 576px) {
+    #predicted-family,
+    #confidence {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>木马家族分类系统</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <!-- ============ 标题区 ============ -->
+        <header class="mb-4">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                    <h1 class="h3 mb-1">基于轻量级 Transformer 的木马家族分类系统</h1>
+                    <p class="text-muted mb-0">轻量猎手小组 · 样本上传 · 模型分类 · 结果可视化</p>
+                </div>
+                <div id="service-status" class="badge bg-secondary fs-6">服务状态：检测中…</div>
+            </div>
+        </header>
+
+        <!-- ============ 上传区 ============ -->
+        <section class="card mb-4">
+            <div class="card-header">
+                <h2 class="h5 mb-0">样本上传</h2>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-end g-3">
+                    <div class="col-md-8">
+                        <label for="file-input" class="form-label">选择样本文件（支持 .txt / .hex / .bin）</label>
+                        <input type="file" class="form-control" id="file-input" accept=".txt,.hex,.bin">
+                    </div>
+                    <div class="col-md-4">
+                        <button id="predict-btn" class="btn btn-primary w-100" disabled>
+                            <span id="btn-text">开始分类</span>
+                            <span id="btn-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                        </button>
+                    </div>
+                </div>
+                <div id="file-info" class="mt-3 small text-muted d-none"></div>
+                <div id="error-msg" class="alert alert-danger mt-3 d-none" role="alert"></div>
+            </div>
+        </section>
+
+        <!-- ============ 结果区 ============ -->
+        <section id="result-section" class="card mb-4 d-none">
+            <div class="card-header">
+                <h2 class="h5 mb-0">分类结果</h2>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <div class="text-muted mb-1">预测家族</div>
+                        <div id="predicted-family" class="display-5 fw-bold text-primary">—</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-muted mb-1">置信度</div>
+                        <div id="confidence" class="display-5 fw-bold text-success">—</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ Top-5 区域 ============ -->
+        <section id="top5-section" class="card mb-4 d-none">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Top-5 候选家族概率</h2>
+            </div>
+            <div class="card-body">
+                <div id="top5-chart" style="width: 100%; height: 320px;"></div>
+            </div>
+        </section>
+
+        <!-- ============ 特征分析区（Attention Map） ============ -->
+        <section id="attention-section" class="card mb-4 d-none">
+            <div class="card-header">
+                <h2 class="h5 mb-0">特征分析 · Attention Map 热力图</h2>
+            </div>
+            <div class="card-body">
+                <div id="attention-chart" style="width: 100%; height: 360px;"></div>
+                <div id="attention-empty" class="text-muted text-center d-none">暂无 Attention 数据</div>
+            </div>
+        </section>
+
+        <!-- ============ 历史记录区 ============ -->
+        <section class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h2 class="h5 mb-0">历史分类记录</h2>
+                <button id="refresh-history-btn" class="btn btn-sm btn-outline-secondary">刷新</button>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th>文件名</th>
+                                <th>预测家族</th>
+                                <th style="width: 180px;">分类时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody">
+                            <tr><td colspan="4" class="text-center text-muted py-4">加载中…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-muted small mt-4">
+            前端：HTML5 + Bootstrap 5 + ECharts.js ｜ 后端：Flask ｜ 模型：轻量级 Transformer
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 图表模块 -->
+    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    <!-- 主逻辑 -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
