@@ -3,7 +3,7 @@
     "use strict";
 
     // 允许的文件后缀
-    const ALLOWED_EXT = [".txt", ".hex", ".bin"];
+    const ALLOWED_EXT = [".txt", ".hex", ".bin", ".bytes"];
 
     // DOM 元素
     const fileInput = document.getElementById("file-input");
@@ -91,7 +91,7 @@
         // 格式校验
         const ext = getExt(file.name);
         if (!ALLOWED_EXT.includes(ext)) {
-            showError("不支持的文件格式，仅支持 .txt / .hex / .bin");
+            showError("不支持的文件格式，仅支持 " + ALLOWED_EXT.join(" / "));
             selectedFile = null;
             fileInfo.classList.add("d-none");
             predictBtn.disabled = true;
