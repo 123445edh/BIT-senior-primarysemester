@@ -8,10 +8,19 @@
   GET  /api/history        查询历史分类记录（?limit=20）
 """
 from flask import Flask, request, jsonify
+from service import predict_from_bytes
+from pathlib import Path
 import db
+import os
+
+
+
+MODEL_PATH = os.environ.get(
+    "MODEL_PATH",
+    str(Path(__file__).resolve().parents[1] / "training" / "runs" / "base" / "best.pt"),
+)
 
 app = Flask(__name__)
-
 # 启动时初始化数据库（自动建表）
 db.init_db()
 
@@ -31,23 +40,26 @@ def predict():
     data = file.read()
     file_size = len(data)
 
-    # ===== TODO：接入模型推理（等程思涵的模型好了以后替换这里）=====
-    # 现在先用 Mock 假结果，保证前后端能先联调
-    predicted_family = "Mirai"
-    confidence = 0.92
-    top5 = [{"family": "Mirai", "score": 0.92}]
-    attention_data = []
-    # =========================================================
+    try:
+        result = predict_from_bytes(data, MODEL_PATH)
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
-    db.add_record(filename, predicted_family, confidence, file_size)
+    db.add_record(
+        filename,
+        result["predicted_family"],
+        result["confidence"],
+        file_size,
+    )
 
     return jsonify({
         "status": "success",
-        "predicted_family": predicted_family,
-        "confidence": confidence,
-        "top5": top5,
-        "attention_data": attention_data,
+        "predicted_family": result["predicted_family"],
+        "confidence": result["confidence"],
+        "top5": result["top5"],
+        "attention_data": result["attention_data"],
     })
+
 
 
 @app.get("/api/history")
