@@ -15,6 +15,7 @@
                 axisPointer: { type: "shadow" },
                 formatter: function (params) {
                     const p = params[0];
+                    if (!p || typeof p.value !== "number") return "";
                     return `${p.name}<br/>概率：${(p.value * 100).toFixed(2)}%`;
                 },
             },
@@ -22,10 +23,12 @@
             xAxis: {
                 type: "category",
                 data: [],
-                axisLabel: { interval: 0, rotate: 0 },
+                axisLabel: { interval: 0, rotate: 0, hideOverlap: true },
             },
             yAxis: {
                 type: "value",
+                // 上限动态计算：初始给 1，渲染时按实际最大概率收紧，
+                // 避免小概率样本的柱子被压成一条线
                 max: 1,
                 axisLabel: {
                     formatter: function (v) { return (v * 100).toFixed(0) + "%"; },
@@ -44,7 +47,11 @@
                     label: {
                         show: true,
                         position: "top",
-                        formatter: function (p) { return (p.value * 100).toFixed(2) + "%"; },
+                        formatter: function (p) {
+                            return typeof p.value === "number"
+                                ? (p.value * 100).toFixed(2) + "%"
+                                : "";
+                        },
                     },
                     barWidth: "40%",
                 },
@@ -56,12 +63,40 @@
     /** 渲染 Top-5 数据 */
     function renderTop5(top5) {
         if (!top5Chart) return;
-        const families = top5.map((t) => t.family);
-        const scores = top5.map((t) => t.score);
-        top5Chart.setOption({
-            xAxis: { data: families },
-            series: [{ data: scores }],
-        });
+        if (!Array.isArray(top5) || top5.length === 0) return;
+
+        // 兼容 {family, score} 与 {family, probability} 两种字段命名
+        const pickScore = (t) =>
+            typeof t.score === "number"
+                ? t.score
+                : typeof t.probability === "number"
+                  ? t.probability
+                  : 0;
+
+        const families = top5.map((t) => String(t.family ?? "未知"));
+        const scores = top5.map(pickScore);
+
+        // 按概率降序，保证图上从高到低
+        const order = scores
+            .map((v, i) => [v, i])
+            .sort((a, b) => b[0] - a[0])
+            .map((p) => p[1]);
+        const sortedFamilies = order.map((i) => families[i]);
+        const sortedScores = order.map((i) => scores[i]);
+
+        // 动态 y 轴上限：留 25% 顶部余量给数据标签，同时保留 1 为上限的上限
+        const maxScore = Math.max.apply(null, sortedScores);
+        const yMax = Math.min(1, Math.max(0.1, maxScore * 1.25));
+
+        top5Chart.setOption(
+            {
+                xAxis: { data: sortedFamilies },
+                yAxis: { max: yMax },
+                series: [{ data: sortedScores }],
+            },
+            // 显式不合并，防止切换样本时残留上一次的轴标签
+            { notMerge: false, lazyUpdate: true }
+        );
     }
 
     /** 初始化 Attention 热力图 */
