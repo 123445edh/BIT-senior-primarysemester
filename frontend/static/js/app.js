@@ -142,18 +142,21 @@
             resultSection.classList.remove("d-none");
 
             // Top-5 柱状图
+            // 注意顺序：必须先让容器可见（去掉 d-none），再渲染。
+            // 否则容器宽高为 0，ECharts 会退回默认 100px 宽度，图表缩成一小条。
             if (data.top5 && data.top5.length > 0) {
-                ChartModule.renderTop5(data.top5);
                 top5Section.classList.remove("d-none");
+                ChartModule.renderTop5(data.top5);
             } else {
                 top5Section.classList.add("d-none");
             }
 
-            // Attention Map
+            // Attention Map（同样先显示容器再渲染）
             const hasAttention =
                 data.attention_data &&
                 Array.isArray(data.attention_data) &&
                 data.attention_data.length > 0;
+            attentionSection.classList.remove("d-none");
             if (hasAttention) {
                 ChartModule.renderAttention(data.attention_data);
                 attentionEmpty.classList.add("d-none");
@@ -161,7 +164,6 @@
                 attentionEmpty.classList.remove("d-none");
                 ChartModule.renderAttention([]);
             }
-            attentionSection.classList.remove("d-none");
 
             // 刷新历史记录
             loadHistory();

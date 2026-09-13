@@ -88,15 +88,16 @@
         const maxScore = Math.max.apply(null, sortedScores);
         const yMax = Math.min(1, Math.max(0.1, maxScore * 1.25));
 
-        top5Chart.setOption(
-            {
-                xAxis: { data: sortedFamilies },
-                yAxis: { max: yMax },
-                series: [{ data: sortedScores }],
-            },
-            // 显式不合并，防止切换样本时残留上一次的轴标签
-            { notMerge: false, lazyUpdate: true }
-        );
+        top5Chart.setOption({
+            xAxis: { data: sortedFamilies },
+            yAxis: { max: yMax },
+            series: [{ data: sortedScores }],
+        });
+
+        // 图表容器初始处于 d-none 隐藏状态，echarts.init 时量不到宽度，
+        // 会回退成默认 100px（表现为"缩成一小条"）。渲染后强制按当前
+        // 可见容器尺寸重算，确保铺满整个卡片宽度。
+        top5Chart.resize();
     }
 
     /** 初始化 Attention 热力图 */
@@ -179,6 +180,9 @@
                 },
             ],
         });
+
+        // 同 Top-5：容器从 d-none 切为可见后需重算尺寸，否则停留在默认 100px
+        attentionChart.resize();
         return true;
     }
 
