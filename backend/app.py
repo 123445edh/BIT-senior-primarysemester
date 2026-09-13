@@ -3,13 +3,15 @@
 木马家族分类系统 —— 后端服务
 
 接口：
-  GET  /api/health         健康检查
-  POST /api/predict        上传样本并返回分类结果（multipart/form-data，字段名 file）
-  GET  /api/history        查询历史分类记录（?limit=20）
+  GET  /api/health                 健康检查
+  POST /api/predict                上传样本并返回分类结果（multipart/form-data，字段名 file）
+  GET  /api/history                查询历史分类记录（?limit=20）
+  GET  /api/history/<record_id>    查询单条历史记录明细（含 Top-5 候选概率）
 """
 from flask import Flask, request, jsonify
 from service import predict_from_bytes
 from pathlib import Path
+import json
 import db
 import os
 
@@ -21,7 +23,7 @@ MODEL_PATH = os.environ.get(
 )
 
 app = Flask(__name__)
-# 启动时初始化数据库（自动建表）
+# 启动时初始化数据库（自动建表 + 增量补列）
 db.init_db()
 
 
@@ -45,15 +47,18 @@ def predict():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-    db.add_record(
+    record_id = db.add_record(
         filename,
         result["predicted_family"],
         result["confidence"],
         file_size,
+        top5=result.get("top5"),
+        attention=result.get("attention_data"),
     )
 
     return jsonify({
         "status": "success",
+        "record_id": record_id,
         "predicted_family": result["predicted_family"],
         "confidence": result["confidence"],
         "top5": result["top5"],
@@ -69,10 +74,47 @@ def history():
         limit = 20
     rows = db.get_history(limit)
     items = [
-        {"id": r[0], "filename": r[1], "result": r[2], "timestamp": r[4]}
+        {
+            "id": r["id"],
+            "filename": r["filename"],
+            "result": r["predicted_family"],
+            "confidence": r["confidence"],
+            "file_size": r["file_size"],
+            "timestamp": r["timestamp"],
+        }
         for r in rows
     ]
     return jsonify({"history": items})
+
+
+@app.get("/api/history/<int:record_id>")
+def history_detail(record_id):
+    """单条历史记录明细：基础字段 + 已保存的 Top-5 / Attention 数据"""
+    row = db.get_record(record_id)
+    if row is None:
+        return jsonify({"status": "error", "message": "记录不存在"}), 404
+
+    def _load(raw):
+        if not raw:
+            return None
+        try:
+            return json.loads(raw)
+        except (TypeError, ValueError):
+            return None
+
+    return jsonify({
+        "status": "success",
+        "record": {
+            "id": row["id"],
+            "filename": row["filename"],
+            "predicted_family": row["predicted_family"],
+            "confidence": row["confidence"],
+            "file_size": row["file_size"],
+            "timestamp": row["timestamp"],
+            "top5": _load(row["top5_json"]),
+            "attention_data": _load(row["attention_json"]),
+        },
+    })
 
 
 if __name__ == "__main__":

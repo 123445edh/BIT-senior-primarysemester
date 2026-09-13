@@ -1,120 +1,191 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="YXFI3Uu6CRFJFsF1qz9hd1">
+<head data-page-node-id="DJwzKa6MFEoy4ssSwFwm82">
+    <meta charset="UTF-8" data-page-node-id="TYgM9SkIAF44yPYCrf2iWn">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="xFldjm2pyN6hUDqTzacXcl">
     <title>木马家族分类系统</title>
     <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" data-page-node-id="sc3b7F1Gp8VvOvkIzv7NHv">
     <!-- ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <!-- 自定义样式 -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" data-page-node-id="AF4lmW3qyFSvb3Cq4XRUjL">
 </head>
-<body>
-    <div class="container-fluid py-4">
+<body data-page-node-id="uCbaHU62DP9nQFB3XCEXd4">
+    <div class="container-fluid py-4" data-page-node-id="R1HdhKn8Al0GVhe8jw6MA0">
         <!-- ============ 标题区 ============ -->
-        <header class="mb-4">
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <div>
-                    <h1 class="h3 mb-1">基于轻量级 Transformer 的木马家族分类系统</h1>
-                    <p class="text-muted mb-0">轻量猎手小组 · 样本上传 · 模型分类 · 结果可视化</p>
+        <header class="mb-4" data-page-node-id="n9OVrbpgs3TZnNi4OLlHO3">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2" data-page-node-id="HLs6EnBMHsNUSoFTSI7p2H">
+                <div data-page-node-id="sVSfPMeC5vOscxg9DRTFSN">
+                    <h1 class="h3 mb-1" data-page-node-id="kwyRGqHagxA6wOqUppFB3Y">基于轻量级 Transformer 的木马家族分类系统</h1>
+                    <p class="text-muted mb-0" data-page-node-id="xO0jvoXoois5FAMbnLKEO0">轻量猎手小组 · 样本上传 · 模型分类 · 结果可视化</p>
                 </div>
-                <div id="service-status" class="badge bg-secondary fs-6">服务状态：检测中…</div>
+                <div id="service-status" class="badge bg-secondary fs-6" data-page-node-id="d3Z72bBJs9ddWovM8kvgHo">服务状态：检测中…</div>
             </div>
         </header>
 
         <!-- ============ 上传区 ============ -->
-        <section class="card mb-4">
-            <div class="card-header">
-                <h2 class="h5 mb-0">样本上传</h2>
+        <section class="card mb-4" data-page-node-id="t8636YHN7Fs8tW9TFXmjsE">
+            <div class="card-header" data-page-node-id="wJsESICgF4wBg5eY0Y5IwD">
+                <h2 class="h5 mb-0" data-page-node-id="gMwWfbF1dTl5KWDFoimBsh">样本上传</h2>
             </div>
-            <div class="card-body">
-                <div class="row align-items-end g-3">
-                    <div class="col-md-8">
-                        <label for="file-input" class="form-label">选择样本文件（支持 .txt / .hex / .bin / .bytes）</label>
-                        <input type="file" class="form-control" id="file-input" accept=".txt,.hex,.bin,.bytes">
+            <div class="card-body" data-page-node-id="X1dZmajcxZ7p1wxTo8lEid">
+                <div class="row align-items-end g-3" data-page-node-id="CJRPVDhjZQt3XfbAQV6E4g">
+                    <div class="col-md-8" data-page-node-id="nzg9J6XXRWnrd8mtAXtO1A">
+                        <label for="file-input" class="form-label" data-page-node-id="kTLKD8XBSG8DGbg9CQPmoA">选择样本文件（支持 .txt / .hex / .bin / .bytes）</label>
+                        <input type="file" class="form-control" id="file-input" accept=".txt,.hex,.bin,.bytes" data-page-node-id="NB4mNEapGffuoYLGHLsk6W">
                     </div>
-                    <div class="col-md-4">
-                        <button id="predict-btn" class="btn btn-primary w-100" disabled>
-                            <span id="btn-text">开始分类</span>
-                            <span id="btn-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                    <div class="col-md-4" data-page-node-id="DoJG94ixE3WIOuhDPJZGcn">
+                        <button id="predict-btn" class="btn btn-primary w-100" disabled data-page-node-id="edTCjM2u46eBI7AHNEsdtd">
+                            <span id="btn-text" data-page-node-id="exYgqkE722HeUM14ClC0Ds">开始分类</span>
+                            <span id="btn-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" data-page-node-id="rI3ZzVN4RdHHKyYy1TjtYf"></span>
                         </button>
                     </div>
                 </div>
-                <div id="file-info" class="mt-3 small text-muted d-none"></div>
-                <div id="error-msg" class="alert alert-danger mt-3 d-none" role="alert"></div>
+                <div id="file-info" class="mt-3 small text-muted d-none" data-page-node-id="0xScXm50DMdRS54qXElAFf"></div>
+                <div id="error-msg" class="alert alert-danger mt-3 d-none" role="alert" data-page-node-id="ExB5mJfFw5W6dUEtfsV8Aw"></div>
             </div>
         </section>
 
         <!-- ============ 结果区 ============ -->
-        <section id="result-section" class="card mb-4 d-none">
-            <div class="card-header">
-                <h2 class="h5 mb-0">分类结果</h2>
+        <section id="result-section" class="card mb-4 d-none" data-page-node-id="lW05G9vxjSdl3N5qRIBCpW">
+            <div class="card-header" data-page-node-id="H1IxbgCdswXCouTNKNmfS6">
+                <h2 class="h5 mb-0" data-page-node-id="PT5XrmmNO40g83eLGeUlkF">分类结果</h2>
             </div>
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-md-6 mb-3 mb-md-0">
-                        <div class="text-muted mb-1">预测家族</div>
-                        <div id="predicted-family" class="display-5 fw-bold text-primary">—</div>
+            <div class="card-body" data-page-node-id="eI8ylGHPcgfkKT9X1BM06B">
+                <div class="row text-center" data-page-node-id="xFgMbZeoCWeIOQ8mLLBDFj">
+                    <div class="col-md-6 mb-3 mb-md-0" data-page-node-id="wGq1HdUL1xZ7YNJwL22UrN">
+                        <div class="text-muted mb-1" data-page-node-id="26hNrLNppmgwqUqnreeL9p">预测家族</div>
+                        <div id="predicted-family" class="display-5 fw-bold text-primary" data-page-node-id="T121vMPnd1qosLVRW31Wbm">—</div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="text-muted mb-1">置信度</div>
-                        <div id="confidence" class="display-5 fw-bold text-success">—</div>
+                    <div class="col-md-6" data-page-node-id="VBhKiLVZ0ASifYOq7xeI6F">
+                        <div class="text-muted mb-1" data-page-node-id="VpbgUDLpe5UjAoZdtkkw1X">置信度</div>
+                        <div id="confidence" class="display-5 fw-bold text-success" data-page-node-id="aQZpMjjk0kMGszkaDOZH1C">—</div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ============ Top-5 区域 ============ -->
-        <section id="top5-section" class="card mb-4 d-none">
-            <div class="card-header">
-                <h2 class="h5 mb-0">Top-5 候选家族概率</h2>
+        <section id="top5-section" class="card mb-4 d-none" data-page-node-id="Bjl11U1pxuAAsvesiXvCk0">
+            <div class="card-header" data-page-node-id="LC9zdd6okbyXL10wwTfGOQ">
+                <h2 class="h5 mb-0" data-page-node-id="QKZwIDcTw997NddOnFsmM9">Top-5 候选家族概率</h2>
             </div>
-            <div class="card-body">
-                <div id="top5-chart" style="width: 100%; height: 320px;"></div>
+            <div class="card-body" data-page-node-id="zJOCQzWzH7fgGoz6RjKU9c">
+                <div id="top5-chart" style="width: 100%; height: 320px;" data-page-node-id="JRu85Gz7OmXtVYD5eDnlRs"></div>
             </div>
         </section>
 
         <!-- ============ 特征分析区（Attention Map） ============ -->
-        <section id="attention-section" class="card mb-4 d-none">
-            <div class="card-header">
-                <h2 class="h5 mb-0">特征分析 · Attention Map 热力图</h2>
+        <section id="attention-section" class="card mb-4 d-none" data-page-node-id="vSUsnnEluMJdqGU87PPR1B">
+            <div class="card-header" data-page-node-id="WG8lJOHw2uQalfRJXIndJF">
+                <h2 class="h5 mb-0" data-page-node-id="CNrIdg23w5jCZB7eX7K9Uc">特征分析 · Attention Map 热力图</h2>
             </div>
-            <div class="card-body">
-                <div id="attention-chart" style="width: 100%; height: 360px;"></div>
-                <div id="attention-empty" class="text-muted text-center d-none">暂无 Attention 数据</div>
+            <div class="card-body" data-page-node-id="Bpr10OxClB0RMr6ERAlpOI">
+                <div id="attention-chart" style="width: 100%; height: 360px;" data-page-node-id="i2ruxl4htzvNSX1QCw6DLa"></div>
+                <div id="attention-empty" class="text-muted text-center d-none" data-page-node-id="oh6NJqJ78AFqi82clGBAPR">暂无 Attention 数据</div>
             </div>
         </section>
 
         <!-- ============ 历史记录区 ============ -->
-        <section class="card">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <h2 class="h5 mb-0">历史分类记录</h2>
-                <button id="refresh-history-btn" class="btn btn-sm btn-outline-secondary">刷新</button>
+        <section class="card" data-page-node-id="JkrbXqIw40X7TqeEfqckGk">
+            <div class="card-header d-flex align-items-center justify-content-between" data-page-node-id="ifFa7QJFy3PEjhB26t1Vss">
+                <h2 class="h5 mb-0" data-page-node-id="GtPI2P32mGN1MPcj6mq1HR">
+                    历史分类记录
+                    <span class="text-muted fw-normal fs-6 ms-1" data-page-node-id="uybUWnqHfRZfjVVPI66yTj">（点击任意一行查看详情）</span>
+                </h2>
+                <button id="refresh-history-btn" class="btn btn-sm btn-outline-secondary" data-page-node-id="tyFVIVXd8VpTJINRF405L2">刷新</button>
             </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width: 60px;">ID</th>
-                                <th>文件名</th>
-                                <th>预测家族</th>
-                                <th style="width: 180px;">分类时间</th>
+            <div class="card-body p-0" data-page-node-id="nj6ly22DEoeQHLCMOYJn1H">
+                <div class="table-responsive" data-page-node-id="1u4tA8Kf8OeW5j9bRtuSEW">
+                    <table class="table table-hover mb-0" data-page-node-id="o0ZQG9zF2cnH5u51dGGq6v">
+                        <thead class="table-light" data-page-node-id="yfcAgqgk4BeeKQYZC5b5Eb">
+                            <tr data-page-node-id="pXxiDaTrjXmuQ7XsYvQkVZ">
+                                <th style="width: 60px;" data-page-node-id="Rp33p1uboeKHm6f4OCuiQW">ID</th>
+                                <th data-page-node-id="0zDdOR2ePbCIl73LDABYHI">文件名</th>
+                                <th data-page-node-id="4dDpXGp1sC9LqItAeeMOwF">预测家族</th>
+                                <th style="width: 180px;" data-page-node-id="AoDMlDQMrb0EOITfw6LWLI">分类时间</th>
+                                <th style="width: 80px;" class="text-end" data-page-node-id="qmM2fxK4m1VTB8KsxHKaQo"></th>
                             </tr>
                         </thead>
-                        <tbody id="history-tbody">
-                            <tr><td colspan="4" class="text-center text-muted py-4">加载中…</td></tr>
+                        <tbody id="history-tbody" data-page-node-id="W2x7nJJBqr971z2sreWTeF">
+                            <tr data-page-node-id="5dFzuEtcSAwBRWJikNKKQV"><td colspan="5" class="text-center text-muted py-4" data-page-node-id="xVO4UAVB5JvJOcHYrCFdIM">加载中…</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <footer class="text-center text-muted small mt-4">
+        <footer class="text-center text-muted small mt-4" data-page-node-id="3czQsmD5dnm41BECldrkdp">
             前端：HTML5 + Bootstrap 5 + ECharts.js ｜ 后端：Flask ｜ 模型：轻量级 Transformer
         </footer>
+    </div>
+
+    <!-- ============ 历史记录详情弹窗 ============ -->
+    <div class="modal fade" id="history-detail-modal" tabindex="-1"
+         aria-labelledby="history-detail-title" aria-hidden="true" data-page-node-id="WAmce4dydWCSvPmp6WIzpI">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" data-page-node-id="ejnIFu3p4GXE8GeBHIhLo5">
+            <div class="modal-content" data-page-node-id="6io5JrEEOg3xT86mnDyGtZ">
+                <div class="modal-header" data-page-node-id="HKRo3mhMKV28IqWwdZEz9n">
+                    <h5 class="modal-title" id="history-detail-title" data-page-node-id="QXtChBFuvDu9LKWRZtNt0E">历史记录详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭" data-page-node-id="ZrHrdpTkHOhv5fESHoVvV3"></button>
+                </div>
+                <div class="modal-body" data-page-node-id="PHkPRAqPYg752Q1rloRYB8">
+                    <div id="history-detail-loading" class="text-center text-muted py-5" data-page-node-id="OQaOzSrElFISXFARojhEq9">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" data-page-node-id="loCW2KsA3dkfYJbLDnWUDL"></span>加载中…
+                    </div>
+                    <div id="history-detail-error" class="alert alert-danger d-none mb-0" role="alert" data-page-node-id="WiN6DIBpODcTeok6RWaAhk"></div>
+
+                    <div id="history-detail-content" class="d-none" data-page-node-id="A1Ody7nA3MyrG0mj4iP7oP">
+                        <div class="row g-3 mb-4" data-page-node-id="LJ0Pvb4InF97QZuYhf6feR">
+                            <div class="col-6 col-lg-3" data-page-node-id="iKVELgI4GfDu75NtVapucJ">
+                                <div class="detail-label" data-page-node-id="tNj1DLeccXc39rMnPVLHhw">记录 ID</div>
+                                <div class="detail-value" id="detail-id" data-page-node-id="uqB1ckp28cF5H9d826VeVR">—</div>
+                            </div>
+                            <div class="col-6 col-lg-3" data-page-node-id="fte29wf8cAXc9qaOLJmSR7">
+                                <div class="detail-label" data-page-node-id="JdOHyWGjApZHQJkdStPX6C">预测家族</div>
+                                <div class="detail-value" data-page-node-id="WpTMieD2SEzUenfft3eNtQ">
+                                    <span class="badge bg-primary fs-6" id="detail-family" data-page-node-id="KVBGwsp3cR7uW9A1LNiPYb">—</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-3" data-page-node-id="jNAuCWvqRe8oL9g5nwhyzD">
+                                <div class="detail-label" data-page-node-id="B7GrA3N3Ti35u9fuC0jRvR">置信度</div>
+                                <div class="detail-value fw-bold text-success" id="detail-confidence" data-page-node-id="1pcaNtWQgD01sWwLwpCS98">—</div>
+                            </div>
+                            <div class="col-6 col-lg-3" data-page-node-id="5GeLyGViNzdU7aNr0fpnGK">
+                                <div class="detail-label" data-page-node-id="bDAPLlrHvNs2jjlmp5kE99">文件大小</div>
+                                <div class="detail-value" id="detail-size" data-page-node-id="TqyQyJUX9fMrxa2kCoaFic">—</div>
+                            </div>
+                            <div class="col-12 col-lg-6" data-page-node-id="c8HRk6rYWbf16Q2FGL95PF">
+                                <div class="detail-label" data-page-node-id="wEJ4XGky91dd9Fbg2DPaZn">文件名</div>
+                                <div class="detail-value text-break" id="detail-filename" data-page-node-id="cW9L6vYTISkbqjWI8NAHPA">—</div>
+                            </div>
+                            <div class="col-12 col-lg-6" data-page-node-id="yBBoTDHId5Jgxa3zZMJ6Rd">
+                                <div class="detail-label" data-page-node-id="ffGEHNKxt2VPpGyIV19Ike">分类时间</div>
+                                <div class="detail-value" id="detail-time" data-page-node-id="W21QFwzBBHWaJWL4MeAy9L">—</div>
+                            </div>
+                        </div>
+
+                        <div id="detail-top5-wrap" class="mb-3 d-none" data-page-node-id="Hea0Uc8j1HkAZKuWgFRcl1">
+                            <h6 class="text-muted" data-page-node-id="7w2QEdxAjuqjgl1knEIoyd">Top-5 候选家族概率</h6>
+                            <div id="detail-top5-chart" style="width: 100%; height: 300px;" data-page-node-id="u9NQ3Y4ELOBCpUYAIsqFDf"></div>
+                        </div>
+
+                        <div id="detail-attention-wrap" class="mb-3 d-none" data-page-node-id="OKnH9khUiObcmD0iamvY8r">
+                            <h6 class="text-muted" data-page-node-id="EMPn4Gik9CEvmH2fezWgh7">Attention Map 热力图</h6>
+                            <div id="detail-attention-chart" style="width: 100%; height: 340px;" data-page-node-id="ooLdr9PhqqevOmFNEcmS2z"></div>
+                        </div>
+
+                        <div id="detail-no-extra" class="alert alert-secondary d-none mb-0" data-page-node-id="GAqBIlSyY6LQKKoUscfK9n">
+                            该记录未保存 Top-5 / Attention 明细（早期记录，明细自本次版本起开始留存）。
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" data-page-node-id="4wA3VR76sEX3QSYzICpa7N">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-page-node-id="4d9NCS27xbhxkJPmjtUk77">关闭</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS -->

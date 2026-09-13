@@ -1,14 +1,21 @@
-/* 图表渲染模块：Top-5 柱状图 + Attention Map 热力图 */
+/* 图表渲染模块：Top-5 柱状图 + Attention Map 热力图
+ *
+ * 支持多实例：主页面一套、历史记录详情弹窗一套，互不干扰。
+ * 每次渲染后都会 resize()，避免容器从 d-none / 弹窗隐藏态切为可见时
+ * 被 ECharts 冻结在默认 100px 宽度（表现为"缩成一小条"）。
+ */
 (function (window) {
     "use strict";
 
-    let top5Chart = null;
-    let attentionChart = null;
+    // 主页面图表实例
+    var top5Chart = null;
+    var attentionChart = null;
 
-    /** 初始化 Top-5 柱状图 */
-    function initTop5Chart(dom) {
-        top5Chart = echarts.init(dom);
-        top5Chart.setOption({
+    // ============ Top-5 柱状图 ============
+
+    /** Top-5 图表的基础配置（不含数据） */
+    function buildTop5Option() {
+        return {
             title: { text: "Top-5 候选家族概率", left: "center", textStyle: { fontSize: 14 } },
             tooltip: {
                 trigger: "axis",
@@ -56,14 +63,26 @@
                     barWidth: "40%",
                 },
             ],
-        });
-        window.addEventListener("resize", () => top5Chart && top5Chart.resize());
+        };
     }
 
-    /** 渲染 Top-5 数据 */
-    function renderTop5(top5) {
-        if (!top5Chart) return;
-        if (!Array.isArray(top5) || top5.length === 0) return;
+    /**
+     * 创建一个独立的 Top-5 图表实例。
+     * 调用前请确保 dom 已经可见（父容器不能是 display:none），否则会量不到宽度。
+     */
+    function createTop5Chart(dom) {
+        const chart = echarts.init(dom);
+        chart.setOption(buildTop5Option());
+        return chart;
+    }
+
+    /**
+     * 把 Top-5 数据渲染到指定实例上。
+     * 传入的 chart 由 createTop5Chart 或 initTop5Chart 返回，可为任意实例。
+     */
+    function renderTop5On(chart, top5) {
+        if (!chart || chart.isDisposed()) return false;
+        if (!Array.isArray(top5) || top5.length === 0) return false;
 
         // 兼容 {family, score} 与 {family, probability} 两种字段命名
         const pickScore = (t) =>
@@ -88,33 +107,46 @@
         const maxScore = Math.max.apply(null, sortedScores);
         const yMax = Math.min(1, Math.max(0.1, maxScore * 1.25));
 
-        top5Chart.setOption({
+        chart.setOption({
             xAxis: { data: sortedFamilies },
             yAxis: { max: yMax },
             series: [{ data: sortedScores }],
         });
 
-        // 图表容器初始处于 d-none 隐藏状态，echarts.init 时量不到宽度，
-        // 会回退成默认 100px（表现为"缩成一小条"）。渲染后强制按当前
-        // 可见容器尺寸重算，确保铺满整个卡片宽度。
-        top5Chart.resize();
+        // 容器可能刚从隐藏态切为可见，强制按当前尺寸重算
+        chart.resize();
+        return true;
     }
 
-    /** 初始化 Attention 热力图 */
-    function initAttentionChart(dom) {
-        attentionChart = echarts.init(dom);
-        window.addEventListener("resize", () => attentionChart && attentionChart.resize());
+    /** 初始化主页面的 Top-5 图表 */
+    function initTop5Chart(dom) {
+        top5Chart = createTop5Chart(dom);
+        window.addEventListener("resize", function () {
+            if (top5Chart && !top5Chart.isDisposed()) top5Chart.resize();
+        });
+    }
+
+    /** 渲染主页面的 Top-5 数据 */
+    function renderTop5(top5) {
+        return renderTop5On(top5Chart, top5);
+    }
+
+    // ============ Attention Map 热力图 ============
+
+    /** 创建一个独立的 Attention 图表实例（调用前 dom 需可见） */
+    function createAttentionChart(dom) {
+        return echarts.init(dom);
     }
 
     /**
-     * 渲染 Attention Map 热力图
+     * 渲染 Attention Map 热力图到指定实例
      * attentionData: 二维数组 [[row1...], [row2...], ...]
      */
-    function renderAttention(attentionData) {
-        if (!attentionChart) return;
+    function renderAttentionOn(chart, attentionData) {
+        if (!chart || chart.isDisposed()) return false;
 
         if (!attentionData || !Array.isArray(attentionData) || attentionData.length === 0) {
-            attentionChart.clear();
+            chart.clear();
             return false;
         }
 
@@ -139,7 +171,7 @@
         const yLabels = [];
         for (let i = 0; i < rows; i++) yLabels.push("Head " + i);
 
-        attentionChart.setOption({
+        chart.setOption({
             title: { text: "Attention Map（注意力权重分布）", left: "center", textStyle: { fontSize: 14 } },
             tooltip: {
                 position: "top",
@@ -181,9 +213,22 @@
             ],
         });
 
-        // 同 Top-5：容器从 d-none 切为可见后需重算尺寸，否则停留在默认 100px
-        attentionChart.resize();
+        // 同 Top-5：容器从隐藏态切为可见后需重算尺寸
+        chart.resize();
         return true;
+    }
+
+    /** 初始化主页面的 Attention 图表 */
+    function initAttentionChart(dom) {
+        attentionChart = createAttentionChart(dom);
+        window.addEventListener("resize", function () {
+            if (attentionChart && !attentionChart.isDisposed()) attentionChart.resize();
+        });
+    }
+
+    /** 渲染主页面的 Attention 数据 */
+    function renderAttention(attentionData) {
+        return renderAttentionOn(attentionChart, attentionData);
     }
 
     // 暴露到全局
@@ -192,5 +237,16 @@
         renderTop5,
         initAttentionChart,
         renderAttention,
+        // 多实例接口（历史详情弹窗使用）
+        createTop5Chart,
+        renderTop5On,
+        createAttentionChart,
+        renderAttentionOn,
+        // 模块自建的 resize 逻辑用不到时，外部可手动触发
+        resizeAll: function () {
+            [top5Chart, attentionChart].forEach(function (c) {
+                if (c && !c.isDisposed()) c.resize();
+            });
+        },
     };
 })(window);
