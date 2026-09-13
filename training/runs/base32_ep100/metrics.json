@@ -1,0 +1,335 @@
+{
+  "architecture": "repository SwinClassifier",
+  "source_commit": "92a2f055fa96b1c2e3af2383eebaf38a1235c232",
+  "config": {
+    "num_classes": 9,
+    "embed_dim": 32,
+    "depths": [
+      2,
+      2,
+      2
+    ],
+    "num_heads": [
+      2,
+      4,
+      8
+    ],
+    "mlp_ratio": 4.0,
+    "dropout": 0.0,
+    "drop_path": 0.1
+  },
+  "parameters": 566661,
+  "trainable_parameters": 566661,
+  "unique_samples": {
+    "train": 562,
+    "val": 120,
+    "test": 121
+  },
+  "seed": 42,
+  "device": "cpu",
+  "python": "3.12.7",
+  "torch": "2.9.0+cpu",
+  "numpy": "1.26.4",
+  "hardware": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "threads": 2,
+  "command_args": {
+    "data_dir": "..\\data\\final\\data",
+    "out": "runs\\base32_ep100",
+    "epochs": 100,
+    "batch_size": 32,
+    "device": "cpu",
+    "threads": 2,
+    "workers": 0,
+    "seed": 42,
+    "embed_dim": 32,
+    "depths": [
+      2,
+      2,
+      2
+    ],
+    "heads": [
+      2,
+      4,
+      8
+    ],
+    "mlp_ratio": 4.0,
+    "dropout": 0.0,
+    "drop_path": 0.1,
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "label_smoothing": 0.05,
+    "skip_test": true
+  },
+  "manifest_sha256": "6746c2b6342983efe94a687596b98d2ff33d0c2c9ecb1a1c59c3411408154b38",
+  "class_weights": [
+    0.9320066571235657,
+    0.8920634984970093,
+    0.9183006286621094,
+    0.9320066571235657,
+    2.3127572536468506,
+    0.9756944179534912,
+    0.9756944179534912,
+    0.9183006286621094,
+    0.9320066571235657
+  ],
+  "preprocess": "full_bytes_1024_bins_known_mean_round_half_up_v1",
+  "best_epoch": 57,
+  "final": {
+    "train": {
+      "samples": 562,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "loss": 0.04872185585761834,
+      "seconds": 0.592929500000082,
+      "samples_per_second": 947.8361255426189,
+      "confusion_matrix": [
+        [
+          67,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          70,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          68,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          67,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          27,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          64,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          64,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          68,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          67
+        ]
+      ],
+      "family_order": [
+        "Ramnit",
+        "Lollipop",
+        "Kelihos_ver3",
+        "Vundo",
+        "Simda",
+        "Tracur",
+        "Kelihos_ver1",
+        "Obfuscator.ACY",
+        "Gatak"
+      ]
+    },
+    "val": {
+      "samples": 120,
+      "accuracy": 0.8583333333333333,
+      "macro_f1": 0.8523283230179781,
+      "loss": 0.6411656220753987,
+      "seconds": 0.12369409999973868,
+      "samples_per_second": 970.1351964261312,
+      "confusion_matrix": [
+        [
+          12,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          13,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          14,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          14,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          5,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          0,
+          1,
+          10,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          13,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          10,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          12
+        ]
+      ],
+      "family_order": [
+        "Ramnit",
+        "Lollipop",
+        "Kelihos_ver3",
+        "Vundo",
+        "Simda",
+        "Tracur",
+        "Kelihos_ver1",
+        "Obfuscator.ACY",
+        "Gatak"
+      ]
+    }
+  },
+  "inference_benchmark": {
+    "batch_size": 1,
+    "warmup": 5,
+    "repeats": 30,
+    "mean_ms": 2.7370666666077645,
+    "p50_ms": 2.6892999999290623,
+    "p95_ms": 3.360604999807037,
+    "scope": "forward_only_on_device"
+  },
+  "optimization_seconds_total": 157.2297681999994,
+  "cumulative_train_presentations": 56200,
+  "checkpoint_mib": 2.1884546279907227,
+  "wall_seconds": 235.87019260000034,
+  "wall_scope": "data validation + plots + training + eval + checkpoint IO + benchmark; excludes imports/model initialization",
+  "test_evaluated": false,
+  "limitations": "已知恶意软件9类分类；不能判断良恶性。单次小样本划分；轻量化精度需多种子验证。"
+}

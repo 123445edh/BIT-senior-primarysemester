@@ -1,0 +1,76 @@
+{
+  "architecture": "repository SwinClassifier",
+  "source_commit": "92a2f055fa96b1c2e3af2383eebaf38a1235c232",
+  "config": {
+    "num_classes": 9,
+    "embed_dim": 32,
+    "depths": [
+      2,
+      2,
+      2
+    ],
+    "num_heads": [
+      2,
+      4,
+      8
+    ],
+    "mlp_ratio": 4.0,
+    "dropout": 0.0,
+    "drop_path": 0.1
+  },
+  "parameters": 566661,
+  "trainable_parameters": 566661,
+  "unique_samples": {
+    "train": 562,
+    "val": 120,
+    "test": 121
+  },
+  "seed": 42,
+  "device": "cpu",
+  "python": "3.12.7",
+  "torch": "2.9.0+cpu",
+  "numpy": "1.26.4",
+  "hardware": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "threads": 2,
+  "command_args": {
+    "data_dir": "..\\data\\final\\data",
+    "out": "runs\\base32_ep100",
+    "epochs": 100,
+    "batch_size": 32,
+    "device": "cpu",
+    "threads": 2,
+    "workers": 0,
+    "seed": 42,
+    "embed_dim": 32,
+    "depths": [
+      2,
+      2,
+      2
+    ],
+    "heads": [
+      2,
+      4,
+      8
+    ],
+    "mlp_ratio": 4.0,
+    "dropout": 0.0,
+    "drop_path": 0.1,
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "label_smoothing": 0.05,
+    "skip_test": true
+  },
+  "manifest_sha256": "6746c2b6342983efe94a687596b98d2ff33d0c2c9ecb1a1c59c3411408154b38",
+  "class_weights": [
+    0.9320066571235657,
+    0.8920634984970093,
+    0.9183006286621094,
+    0.9320066571235657,
+    2.3127572536468506,
+    0.9756944179534912,
+    0.9756944179534912,
+    0.9183006286621094,
+    0.9320066571235657
+  ],
+  "preprocess": "full_bytes_1024_bins_known_mean_round_half_up_v1"
+}
