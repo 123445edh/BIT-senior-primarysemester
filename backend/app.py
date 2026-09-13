@@ -17,7 +17,7 @@ import os
 
 MODEL_PATH = os.environ.get(
     "MODEL_PATH",
-    str(Path(__file__).resolve().parents[1] / "training" / "runs" / "baseline30" / "best.pt"),
+    str(Path(__file__).resolve().parents[1] / "training" / "runs" / "base32_ep100" / "best.pt"),
 )
 
 app = Flask(__name__)
