@@ -125,8 +125,14 @@ def predict_from_bytes(raw_bytes: bytes, checkpoint_path: str | Path) -> dict:
 
     # 2. 模型推理
     with torch.inference_mode():
-        logits = model(x)
+        logits, attention_map = model.forward_attention(x)
         scores = logits.softmax(dim=1)[0].cpu()
+        if attention_map is not None:
+            # [windows, heads, tokens_q, tokens_k] -> [heads, tokens_k]（对 query 维取均值）
+            attn = attention_map[0].mean(dim=1).cpu()
+            attention_data = [[round(float(v), 4) for v in row] for row in attn.tolist()]
+        else:
+            attention_data = []
 
     # 3. 组装 top5
     values, indices = scores.topk(5)
@@ -139,5 +145,5 @@ def predict_from_bytes(raw_bytes: bytes, checkpoint_path: str | Path) -> dict:
         "predicted_family": top5[0]["family"],
         "confidence": top5[0]["score"],
         "top5": top5,
-        "attention_data": [],  # Swin 不输出 attention map，前端热力图可后续再议
+        "attention_data": attention_data,
     }

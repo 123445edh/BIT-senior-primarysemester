@@ -141,7 +141,7 @@ class WindowAttention(nn.Module):
         self.register_buffer("relative_position_index", relative_position_index, persistent=False)
         nn.init.trunc_normal_(self.relative_position_bias, std=0.02)
 
-    def forward(self, x, mask=None):
+    def forward(self, x, mask=None, return_attention=False):
         batch_windows, tokens, channels = x.shape
         qkv = self.qkv(x)
         qkv = qkv.reshape(batch_windows, tokens, 3, self.num_heads, self.head_dim)
@@ -164,7 +164,10 @@ class WindowAttention(nn.Module):
             attention = attention.view(-1, self.num_heads, tokens, tokens)
         attention = self.attention_dropout(attention.softmax(dim=-1))
         x = (attention @ value).transpose(1, 2).reshape(batch_windows, tokens, channels)
-        return self.projection_dropout(self.projection(x))
+        out = self.projection_dropout(self.projection(x))
+        if return_attention:
+            return out, attention
+        return out
 
 
 class SwinBlock(nn.Module):
@@ -224,7 +227,7 @@ class SwinBlock(nn.Module):
         mask = windows.unsqueeze(1) - windows.unsqueeze(2)
         return mask.masked_fill(mask != 0, -100.0).masked_fill(mask == 0, 0.0)
 
-    def forward(self, x):
+    def forward(self, x, return_attention=False):
         height, width = self.resolution
         batch, tokens, channels = x.shape
         if tokens != height * width:
@@ -234,13 +237,19 @@ class SwinBlock(nn.Module):
         if self.shift_size:
             x = torch.roll(x, shifts=(-self.shift_size, -self.shift_size), dims=(1, 2))
         windows = window_partition(x, self.window_size)
-        windows = self.attention(windows, self.attention_mask)
+        if return_attention:
+            windows, attn = self.attention(windows, self.attention_mask, return_attention=True)
+        else:
+            windows = self.attention(windows, self.attention_mask)
         x = window_reverse(windows, self.window_size, height, width)
         if self.shift_size:
             x = torch.roll(x, shifts=(self.shift_size, self.shift_size), dims=(1, 2))
         x = x.view(batch, tokens, channels)
         x = shortcut + self.path1(x)
-        return x + self.path2(self.mlp(self.norm2(x)))
+        x = x + self.path2(self.mlp(self.norm2(x)))
+        if return_attention:
+            return x, attn
+        return x
 
 
 class PatchMerging(nn.Module):
@@ -346,6 +355,26 @@ class SwinClassifier(nn.Module):
             if stage_index < len(self.mergers):
                 x = self.mergers[stage_index](x)
         return self.head(self.norm(x).mean(dim=1))
+
+    def forward_attention(self, x):
+        """返回 (logits, attention_map)；attention_map 来自最后一个 Swin block（全局 16 token、8 头）。"""
+        if x.ndim != 4 or x.shape[1:] != (1, 32, 32):
+            raise ValueError("Expected input shape (B, 1, 32, 32)")
+        x = self.patch_embed(x).flatten(2).transpose(1, 2)
+        x = self.patch_norm(x)
+        attention_map = None
+        for stage_index, stage in enumerate(self.stages):
+            blocks = list(stage.children())
+            for block_index, block in enumerate(blocks):
+                is_last = (stage_index == len(self.stages) - 1) and (block_index == len(blocks) - 1)
+                if is_last:
+                    x, attention_map = block(x, return_attention=True)
+                else:
+                    x = block(x)
+            if stage_index < len(self.mergers):
+                x = self.mergers[stage_index](x)
+        logits = self.head(self.norm(x).mean(dim=1))
+        return logits, attention_map
 
 
 class ViTClassifier(nn.Module):
