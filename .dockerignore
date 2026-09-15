@@ -1,0 +1,8 @@
+.git
+.venv
+__pycache__/
+*.py[cod]
+history.db
+data(2).zip
+feature-engineering/outputs/
+training/runs/*/__pycache__/

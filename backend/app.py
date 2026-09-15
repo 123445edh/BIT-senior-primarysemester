@@ -118,4 +118,6 @@ def history_detail(record_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    host = os.environ.get("HOST", "127.0.0.1")
+    port = int(os.environ.get("BACKEND_PORT", 5000))
+    app.run(debug=True, host=host, port=port)

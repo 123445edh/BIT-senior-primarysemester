@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """SQLite 历史记录表操作"""
 import json
+import os
 import sqlite3
 
-DB_PATH = "history.db"
+DB_PATH = os.environ.get("DB_PATH", "history.db")
 
 
 def _connect():

@@ -98,4 +98,5 @@ def api_proxy(subpath):
 
 if __name__ == "__main__":
     port = int(os.environ.get("FRONTEND_PORT", 8000))
-    app.run(debug=True, host="127.0.0.1", port=port)
+    host = os.environ.get("HOST", "127.0.0.1")
+    app.run(debug=True, host=host, port=port)
